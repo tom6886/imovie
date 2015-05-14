@@ -12,7 +12,7 @@ mongoose.connect('mongodb://localhost/imovie');
 app.set('views', './views/pages');
 app.set('view engine', 'jade');
 app.use(bodyParser.urlencoded({extended: true}));
-app.use(express.static(path.join(__dirname, "bower_components")));
+app.use(express.static(path.join(__dirname, "public")));
 app.listen(port);
 
 console.log('imovie started on port' + port);
@@ -105,6 +105,19 @@ app.post('/admin/new', function (req, res) {
         });
         saveMovie();
     }
+});
+
+app.post("/admin/delete", function (req, res) {
+    var id = req.body.id;
+
+    Movie.remove({_id: id}, function (err, movie) {
+        if (err) {
+            console.log(err);
+            return;
+        }
+
+        res.json({msg: "删除成功"});
+    })
 });
 
 app.get('/list', function (req, res) {
